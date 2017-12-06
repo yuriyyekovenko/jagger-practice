@@ -47,8 +47,8 @@ public class PracticeJLoadScenarioProvider {
     public JLoadScenario practiceScenario() {
         return JLoadScenario.builder(
                 Id.of("practice_scenario"),
-                buildFirstTestGroup(),
-                buildSecondTestGroup(),
+//                buildFirstTestGroup(),
+//                buildSecondTestGroup(),
                 buildThirdTestGroup()
         ).build();
     }
@@ -142,13 +142,18 @@ public class PracticeJLoadScenarioProvider {
                 JTerminationCriteriaDuration.of(DurationInSeconds.of(180));
 
         JLimit shortResponsesWarningLimit = JLimitVsRefValue
-                .builder("response-length", RefValue.of(54.0))
+                .builder("responselength-25", RefValue.of(54.0))
+                .withOnlyWarnings(LowWarnThresh.of(0.98), UpWarnThresh.of(1.01))
+                .build();
+
+        JLimit nextResponsesWarningLimit = JLimitVsRefValue
+                .builder("responselength-50", RefValue.of(60.0))
                 .withOnlyWarnings(LowWarnThresh.of(0.98), UpWarnThresh.of(1.01))
                 .build();
 
         JLoadTest foregroundUser = JLoadTest.builder(Id.of("foreground user"),
                 definition1, foregroundUserGroupProfile, foregroundUserTermination)
-                .withLimits(shortResponsesWarningLimit)
+                .withLimits(shortResponsesWarningLimit, nextResponsesWarningLimit)
                 .build();
 
         //-- background user ----------------------------------------------

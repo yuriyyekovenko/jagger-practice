@@ -14,10 +14,12 @@ import com.griddynamics.jagger.invoker.v2.JHttpResponse;
  * Test-data file, providing different queries, contains 4 cases, all of them with different length.
  * The added aggregator (percentile-25) will allow to check if the query of the smallest length
  * is used in 25% of invocations (not very useful for real perf-testing, just jagger-related exercise).
+ *
+ * Update: I understood how to set limit for specific percentile-aggregator so added 2 more aggregators to the listener.
  * */
 public class ResponseLengthInvocationListener extends ServicesAware implements Provider<InvocationListener> {
 
-    private final String metricName = "response-length";
+    private final String metricName = "responselength";
 
     @Override
     protected void init() {
@@ -26,6 +28,8 @@ public class ResponseLengthInvocationListener extends ServicesAware implements P
                 .showSummary(true)
                 .plotData(true)
                 .addAggregator(new PercentileAggregatorProvider(25D))
+                .addAggregator(new PercentileAggregatorProvider(50D))
+                .addAggregator(new PercentileAggregatorProvider(75D))
         );
     }
 

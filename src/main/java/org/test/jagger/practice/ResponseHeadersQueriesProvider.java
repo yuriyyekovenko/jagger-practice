@@ -1,6 +1,7 @@
 package org.test.jagger.practice;
 
 import com.griddynamics.jagger.invoker.v2.JHttpQuery;
+import org.json.simple.JSONObject;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -20,10 +21,12 @@ public class ResponseHeadersQueriesProvider implements Iterable {
             for (String line : Files.readAllLines(path)) {
                 String[] pair = line.trim().split("=");
 
-                queries.add(new JHttpQuery()
+                queries.add(new JHttpQuery<JSONObject>()
                         .get()
                         .path("/response-headers")
-                        .queryParam(pair[0], pair[1]));
+                        .queryParam(pair[0], pair[1])
+                        .responseBodyType(JSONObject.class)
+                );
             }
         } catch (IOException e) {
             e.printStackTrace();

@@ -47,8 +47,8 @@ public class PracticeJLoadScenarioProvider {
     public JLoadScenario practiceScenario() {
         return JLoadScenario.builder(
                 Id.of("practice_scenario"),
-//                buildFirstTestGroup(),
-//                buildSecondTestGroup(),
+                buildFirstTestGroup(),
+                buildSecondTestGroup(),
                 buildThirdTestGroup()
         ).build();
     }
@@ -115,7 +115,7 @@ public class PracticeJLoadScenarioProvider {
                 .build();
 
         JTerminationCriteria termination = JTerminationCriteriaDuration.of(
-                DurationInSeconds.of(120 + 20 + 20));
+                DurationInSeconds.of(120));
 
         JLoadTest test = JLoadTest.builder(Id.of("test2"), definition, groupProfile, termination)
                 .build();
@@ -129,7 +129,7 @@ public class PracticeJLoadScenarioProvider {
                 .builder(Id.of("test3_1 definition"), endpoint)
                 .withQueryProvider(new ResponseHeadersQueriesProvider())
                 .addValidator(JHttpResponseStatusValidatorProvider.of(200))
-                .addValidator(new QueryParamsInHeadersValidator())
+                .addValidator(new QueryParamsInBodyValidator())
                 .addListener(new ResponseLengthInvocationListener())
                 .build();
 
@@ -160,7 +160,7 @@ public class PracticeJLoadScenarioProvider {
         JTestDefinition definition2 = JTestDefinition
                 .builder(Id.of("test3_2 definition"), endpoint)
                 .withQueryProvider(new ResponseHeadersQueriesProvider())
-                .addValidator(new QueryParamsInHeadersValidator())
+                .addValidator(new QueryParamsInBodyValidator())
                 .addListener(new ResponseLengthInvocationListener())
                 .build();
 
